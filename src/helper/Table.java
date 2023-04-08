@@ -26,7 +26,7 @@ public class Table {
         joinSep = showVerticalLines ? "+" : " ";
     }
 
-    public void setHeaders(String... headers) {
+    public void setHeaders(String[] headers) {
         this.headers = headers;
     }
 
