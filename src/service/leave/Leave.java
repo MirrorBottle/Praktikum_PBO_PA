@@ -39,4 +39,9 @@ public class Leave implements ServiceInterface {
     Helper.banner("Hapus Izin");
     Helper.keypress();
   };
+
+  public static void history() throws IOException {
+    Helper.banner("Histori Izin");
+    Helper.keypress();
+  };
 }

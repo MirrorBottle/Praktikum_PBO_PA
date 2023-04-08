@@ -40,4 +40,9 @@ public class Shift implements ServiceInterface {
     Helper.banner("Hapus Shift");
     Helper.keypress();
   };
+
+  public static void user() throws IOException {
+    Helper.banner("Jadwal Shift");
+    Helper.keypress();
+  };
 }

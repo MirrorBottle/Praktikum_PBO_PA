@@ -10,12 +10,14 @@ import service.user.User;
 
 public class Service {
 
+
+
   public static void admin() throws IOException {
     boolean isRunning = true;
     while (isRunning) {
       Helper.banner("Selamat datang, Admin!");
       String choice = Helper
-          .menus(new String[] { "Manajemen Shift", "Manajemen Absensi", "Manajemen Izin", "Manajemen Pengguna",
+          .menus(new String[] { "Manajemen Shift", "Manajemen Kehadiran", "Manajemen Izin", "Manajemen Pengguna",
               "Log Out" });
       switch (choice) {
         case "1":
@@ -45,16 +47,16 @@ public class Service {
           .menus(new String[] { "Absen Hari Ini", "Jadwal Shift", "Histori Absensi", "Histori Izin", "Log Out" });
       switch (choice) {
         case "1":
-          Service.auth();
+          Attendance.present();
           break;
         case "2":
-          Service.shift();
+          Shift.user();
           break;
         case "3":
-          Service.shift();
+          Attendance.history();
           break;
         case "4":
-          Service.shift();
+          Leave.history();
           break;
         case "5":
           isRunning = false;
@@ -63,7 +65,7 @@ public class Service {
     }
   }
 
-  public static void auth() throws IOException {
+  public static void login() throws IOException {
     Helper.banner("Login");
     String username = Helper.insert("Masukkan username: ");
     String password = Helper.insert("Masukkan password: ");

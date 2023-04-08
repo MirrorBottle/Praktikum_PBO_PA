@@ -9,12 +9,12 @@ public class App {
         Query.init();
         Service.admin();
         // while(isRunning) {
-        //     Helper.banner("Aplikasi Absensi dan Shift");
+        //     Helper.banner("Aplikasi Kehadiran dan Shift");
         //     String choice = Helper.menus(new String[]{"Login", "Jadwal Shift", "Keluar"});
 
         //     switch (choice) {
         //         case "1":
-        //             Service.auth();
+        //             Service.login();
         //             break;
         //         case "2":
         //             Service.shift();
