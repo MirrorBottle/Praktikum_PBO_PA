@@ -64,13 +64,15 @@ public final class Query {
     return data;
   }
 
-  public static Table datatable(String[] headers) {
+  public static Table datatable(String[] headers, ArrayList<ArrayList<String>> data) {
     Table table = new Table();
-    table.setShowVerticalLines(true);// if false (default) then no vertical lines are shown
-    table.setHeaders(headers);// optional - if not used then there will be no header and horizontal lines
-    table.addRow("super", "broccoli", "flexible");
-    table.addRow("assumption", "announcement", "reflection");
-    table.addRow("logic", "pleasant", "wild");
+    table.setShowVerticalLines(true);
+    table.setHeaders(headers);
+    data.forEach((ArrayList<String> row) -> {
+      String[] rowData = row.toArray(new String[row.size()]);
+      table.addRow(rowData);
+    });
+    table.print();
     return table;
   }
 }

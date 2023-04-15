@@ -3,14 +3,31 @@ package service.shift;
 import service.ServiceInterface;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import helper.*;
 
 public class Shift implements ServiceInterface {
-  public String table = "shifts";
+  public static String TABLE = "shifts";
+  public static String[] HEADERS = { "ID", "Karyawan", "Hari", "Jam", "Berlaku Sampai" };
 
-  public static void index() throws IOException {
-    Helper.banner("Manajemen Shift");
+  private ShiftItem transform(ArrayList<String> row) {
+    ShiftItem shift = new ShiftItem();
+    return shift;
+
+  }
+
+  public static void list() throws IOException, SQLException {
+    Helper.banner("Daftar Shift");
+    ArrayList<ArrayList<String>> result = Query.select("SELECT * FROM shifts");
+    Table table = Query.datatable(HEADERS, result);
+    table.print();
+    Helper.keypress();
+  };
+
+  public static void monthly() throws IOException {
+    Helper.banner("Daftar Shift (Bulanan)");
     Helper.keypress();
   };
 
@@ -23,7 +40,7 @@ public class Shift implements ServiceInterface {
 
   };
 
-  public static void create() throws IOException {
+  public static void create() throws IOException, SQLException {
     Helper.banner("Buat Shift Baru");
     Helper.keypress();
 
@@ -44,5 +61,24 @@ public class Shift implements ServiceInterface {
   public static void user() throws IOException {
     Helper.banner("Jadwal Shift");
     Helper.keypress();
+  };
+
+  public static void index() throws IOException, SQLException {
+    boolean isRunning = true;
+
+    while (isRunning) {
+      Helper.banner("Manajemen Shift");
+      String choice = Helper
+            .menus(new String[] { "Lihat Daftar Shift", "Lihat Shift (Bulanan)", "Tambah Shift", "Ubah Shift",
+                "Hapus Shift", "Kembali" });
+      switch (choice) {
+        case "1":
+            list();
+          break;
+      
+        default:
+          break;
+      }
+    }
   };
 }

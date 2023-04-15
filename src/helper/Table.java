@@ -30,7 +30,7 @@ public class Table {
         this.headers = headers;
     }
 
-    public void addRow(String... cells) {
+    public void addRow(String[] cells) {
         rows.add(cells);
     }
 

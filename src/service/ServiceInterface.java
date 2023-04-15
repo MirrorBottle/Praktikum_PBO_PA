@@ -1,7 +1,7 @@
 package service;
 
 public interface ServiceInterface {
-  public String table = "";
+  public static String TABLE = "";
 
   public static void index() {};
   public static void show() {};

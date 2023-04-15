@@ -1,6 +1,7 @@
 package service;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import helper.Helper;
@@ -15,7 +16,7 @@ public class Service {
   public static String authId = null;
   public static String authUsername = null;
 
-  public static void admin() throws IOException {
+  public static void admin() throws IOException, SQLException {
     boolean isRunning = true;
     while (isRunning) {
       Helper.banner("Selamat datang, " + authUsername);
@@ -77,7 +78,7 @@ public class Service {
       String password = Helper.insert("Masukkan password: ");
       try {
         String hashed = Helper.hash(password);
-        ArrayList<String> user = Query.find("users", String.format("WHERE password='%s'", hashed));
+        ArrayList<String> user = Query.find("users", String.format("WHERE username='%s' AND password='%s'", username, hashed));
         if(!user.isEmpty()) {
           isLogin = true;
           authId = user.get(0);
