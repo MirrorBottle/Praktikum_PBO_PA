@@ -51,7 +51,7 @@ public class Service {
     while (isRunning) {
       Helper.banner("Selamat datang, Pengguna!");
       String choice = Helper
-          .menus(new String[] { "Absen Hari Ini", "Jadwal Shift", "Histori Absensi", "Histori Izin", "Ubah Password", "Log Out" });
+          .menus(new String[] { "Absen Hari Ini", "Jadwal Shift", "Histori Absensi", "Histori Izin", "Buat Izin", "Ubah Password", "Log Out" });
       switch (choice) {
         case "1":
           Attendance.present();
@@ -66,9 +66,12 @@ public class Service {
           Leave.history();
           break;
         case "5":
-          User.changePass();
+          Leave.create();
           break;
         case "6":
+          User.changePass();
+          break;
+        case "7":
           isRunning = false;
           break;
       }
