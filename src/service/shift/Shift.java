@@ -1,5 +1,6 @@
 package service.shift;
 
+import service.Service;
 import service.ServiceInterface;
 
 import java.io.IOException;
@@ -57,8 +58,18 @@ public class Shift implements ServiceInterface {
     Helper.keypress();
   };
 
-  public static void user() throws IOException {
+  public static void user() throws IOException, SQLException {
     Helper.banner("Jadwal Shift");
+    String[] headers = { "ID", "Karyawan", "Hari", "Jam", "Berlaku Sampai" };
+
+    ArrayList<ArrayList<String>> result = Query.select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id WHERE shifts.user_id=" + Service.authId);
+    ArrayList<ArrayList<String>> shifts = new ArrayList<>();
+    result.forEach(row -> {
+      ShiftItem shift = new ShiftItem(row);
+      shifts.add(shift.string());
+    });
+    Table table = Query.datatable(headers, shifts);
+    table.print();
     Helper.keypress();
   };
 
