@@ -74,4 +74,42 @@ public final class Query {
     });
     return table;
   }
+
+  public static void update(String table, String id, String[] fields, String[] values) {
+    try {
+      stmt = conn.createStatement();
+      String query = "UPDATE " + table + " SET";
+      for (int i = 0; i < fields.length; i++) {
+        String field = fields[i];
+        String value = values[i];
+        query = i == 0 ? query + "" : query + ",";
+        query = query + " " + field + "='" + value + "'";
+      }
+      query = query + " WHERE id=" + id;
+      stmt.execute(query);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public static void store(String table, String[] fields, String[] values) {
+    try {
+      stmt = conn.createStatement();
+      String query = "INSERT INTO " + table + "(id";
+      for (String field : fields) {
+        query =  query + "," + field;
+      }
+
+      query = query + ") VALUE(NULL";
+
+      for (String value : values) {
+        query = query + ",'" + value + "'";
+      }
+      query = query + ")";
+      // System.out.println(query);
+      stmt.execute(query);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
 }
