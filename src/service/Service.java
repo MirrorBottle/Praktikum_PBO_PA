@@ -1,6 +1,7 @@
 package service;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -43,12 +44,12 @@ public class Service {
     }
   }
 
-  public static void user() throws IOException {
+  public static void user() throws IOException, NoSuchAlgorithmException, SQLException {
     boolean isRunning = true;
     while (isRunning) {
       Helper.banner("Selamat datang, Pengguna!");
       String choice = Helper
-          .menus(new String[] { "Absen Hari Ini", "Jadwal Shift", "Histori Absensi", "Histori Izin", "Log Out" });
+          .menus(new String[] { "Absen Hari Ini", "Jadwal Shift", "Histori Absensi", "Histori Izin", "Ubah Password", "Log Out" });
       switch (choice) {
         case "1":
           Attendance.present();
@@ -63,6 +64,9 @@ public class Service {
           Leave.history();
           break;
         case "5":
+          User.changePass();
+          break;
+        case "6":
           isRunning = false;
           break;
       }
