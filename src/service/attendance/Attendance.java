@@ -1,11 +1,11 @@
 package service.attendance;
+import service.Service;
 import service.ServiceInterface;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
+import java.time.LocalTime;
 
 import helper.*;
 public class Attendance implements ServiceInterface {
@@ -43,19 +43,20 @@ public class Attendance implements ServiceInterface {
     Helper.keypress();
   };
 
-  public static void present() throws IOException, SQLException {
+  public static void present() throws IOException, SQLException, NoSuchAlgorithmException {
     Helper.banner("Presensi Kehadiran");
     String waktu = Helper.waktu();
-
     System.out.println("Waktu :" + waktu );
 
-    String noted = Helper.insert("Masukkan Catatan: ");
-    String sql = "INSERT INTO buku (noted) VALUE('%s')";
-    
+    String noted = Helper.insert("Masukkan Catatan:"); 
+    String status = "1";
+    Query.store( 
+      "attendances",
+      new String[]{"user_id","status","attendance_at","note"},
+      new String[]{Service.authId,status,waktu,noted}
+    );
+    System.out.println("Absensi Berhasil");
     Helper.keypress();
-
-    
-
   };
 
   public static void history() throws IOException {
