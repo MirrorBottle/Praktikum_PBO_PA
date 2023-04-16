@@ -72,7 +72,6 @@ public final class Query {
       String[] rowData = row.toArray(new String[row.size()]);
       table.addRow(rowData);
     });
-    table.print();
     return table;
   }
 }

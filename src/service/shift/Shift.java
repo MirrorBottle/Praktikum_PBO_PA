@@ -12,16 +12,15 @@ public class Shift implements ServiceInterface {
   public static String TABLE = "shifts";
   public static String[] HEADERS = { "ID", "Karyawan", "Hari", "Jam", "Berlaku Sampai" };
 
-  private ShiftItem transform(ArrayList<String> row) {
-    ShiftItem shift = new ShiftItem();
-    return shift;
-
-  }
-
   public static void list() throws IOException, SQLException {
     Helper.banner("Daftar Shift");
-    ArrayList<ArrayList<String>> result = Query.select("SELECT * FROM shifts");
-    Table table = Query.datatable(HEADERS, result);
+    ArrayList<ArrayList<String>> result = Query.select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id");
+    ArrayList<ArrayList<String>> shifts = new ArrayList<>();
+    result.forEach(row -> {
+      ShiftItem shift = new ShiftItem(row);
+      shifts.add(shift.string());
+    });
+    Table table = Query.datatable(HEADERS, shifts);
     table.print();
     Helper.keypress();
   };
