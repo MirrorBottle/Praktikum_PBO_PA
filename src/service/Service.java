@@ -84,7 +84,7 @@ public class Service {
           authId = user.get(0);
           authUsername = user.get(1);
           Helper.keypress("success");
-          if(user.get(3) == "admin") {
+          if(user.get(3).equals("admin")) {
             Service.admin();
           } else {
             Service.user();

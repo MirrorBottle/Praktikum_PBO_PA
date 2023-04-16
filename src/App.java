@@ -1,9 +1,6 @@
-import java.util.ArrayList;
-
 import helper.Helper;
 import helper.Query;
 import service.Service;
-import service.shift.Shift;
 
 public class App {
     static boolean isRunning = true;
