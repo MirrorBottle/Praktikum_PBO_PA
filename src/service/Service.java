@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 import helper.Helper;
 import helper.Query;
+import helper.Table;
 import service.attendance.Attendance;
 import service.leave.Leave;
 import service.shift.Shift;
+import service.shift.ShiftItem;
 import service.user.User;
 
 public class Service {
@@ -102,7 +104,18 @@ public class Service {
     }
   }
 
-  public static void shift() {
+  public static void shift() throws IOException, SQLException {
     Helper.banner("Daftar Shift");
+    String[] headers = { "ID", "Karyawan", "Hari", "Jam", "Berlaku Sampai" };
+
+    ArrayList<ArrayList<String>> result = Query.select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id");
+    ArrayList<ArrayList<String>> shifts = new ArrayList<>();
+    result.forEach(row -> {
+      ShiftItem shift = new ShiftItem(row);
+      shifts.add(shift.string());
+    });
+    Table table = Query.datatable(headers, shifts);
+    table.print();
+    Helper.keypress();
   }
 }
