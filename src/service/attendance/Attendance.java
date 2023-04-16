@@ -2,6 +2,10 @@ package service.attendance;
 import service.ServiceInterface;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 import helper.*;
 public class Attendance implements ServiceInterface {
@@ -39,9 +43,19 @@ public class Attendance implements ServiceInterface {
     Helper.keypress();
   };
 
-  public static void present() throws IOException {
+  public static void present() throws IOException, SQLException {
     Helper.banner("Presensi Kehadiran");
+    String waktu = Helper.waktu();
+
+    System.out.println("Waktu :" + waktu );
+
+    String username = Helper.insert("Masukkan Catatan: ");
+    
+    
     Helper.keypress();
+
+    
+
   };
 
   public static void history() throws IOException {
