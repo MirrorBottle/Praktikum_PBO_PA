@@ -50,7 +50,17 @@ public class User implements ServiceInterface {
     String hashedOldPass = Helper.hash(oldPassword);
     ArrayList<String> user = Query.find("users", String.format("WHERE id='%s' AND password='%s'", Service.authId, hashedOldPass));
     if(!user.isEmpty()) {
-      
+      String hashedNewPass = Helper.hash(newPassword);
+      Query.update(
+        "users",
+        Service.authId,
+        new String[]{"password"},
+        new String[]{hashedNewPass}
+      );
+
+      System.out.println("Password Berhasil Diubah");
+      Helper.keypress("success");
+
     } else {
       System.out.println("Password Lama Anda Salah");
       Helper.keypress("error");

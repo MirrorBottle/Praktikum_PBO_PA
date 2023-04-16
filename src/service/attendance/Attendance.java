@@ -49,8 +49,8 @@ public class Attendance implements ServiceInterface {
 
     System.out.println("Waktu :" + waktu );
 
-    String username = Helper.insert("Masukkan Catatan: ");
-    
+    String noted = Helper.insert("Masukkan Catatan: ");
+    String sql = "INSERT INTO buku (noted) VALUE('%s')";
     
     Helper.keypress();
 
