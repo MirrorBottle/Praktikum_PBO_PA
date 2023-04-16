@@ -9,10 +9,19 @@ import java.util.ArrayList;
 
 import helper.*;
 public class User implements ServiceInterface {
-  public String table = "users";
+  public static String TABLE = "users";
+  public static String[] HEADERS = { "ID", "Username", "Hak Akses"};
 
-  public static void index() throws IOException {
-    Helper.banner("Manajemen Pengguna");
+  public static void list() throws IOException, SQLException {
+    Helper.banner("Daftar Pengguna");
+    ArrayList<ArrayList<String>> result = Query.select("SELECT * FROM users");
+    ArrayList<ArrayList<String>> users = new ArrayList<>();
+    result.forEach(row -> {
+      UserItem user = new UserItem(row);
+      users.add(user.string());
+    });
+    Table table = Query.datatable(HEADERS, users);
+    table.print();
     Helper.keypress();
   };
 
@@ -65,7 +74,25 @@ public class User implements ServiceInterface {
       System.out.println("Password Lama Anda Salah");
       Helper.keypress("error");
     }
-
-    
   }
+
+  public static void index() throws IOException, SQLException {
+    boolean isRunning = true;
+
+    while (isRunning) {
+      Helper.banner("Manajemen Pengguna");
+      String choice = Helper
+            .menus(new String[] { "Lihat Daftar Pengguna", "Tambah Pengguna", "Ubah Pengguna",
+                "Hapus Pengguna", "Kembali" });
+      switch (choice) {
+        case "1":
+            list();
+          break;
+      
+        default:
+          break;
+      }
+    }
+  };
+
 }
