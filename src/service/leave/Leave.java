@@ -1,5 +1,6 @@
 package service.leave;
 
+import service.Service;
 import service.ServiceInterface;
 
 import java.io.IOException;
@@ -26,8 +27,17 @@ public class Leave implements ServiceInterface {
   public static void create() throws IOException {
     Helper.banner("Buat Izin Baru");
     String reason = Helper.insert("Masukkan alasan izin: ");
-    String from_date = Helper.insert("Masukkan tanggal mulai izin : ");
-    String until_date = Helper.insert("Masukkan tanggal akhir izin: ");
+    String from_date = Helper.insert("Masukkan tanggal mulai izin (y-m-d): ");
+    String until_date = Helper.insert("Masukkan tanggal akhir izin (y-m-d): ");
+    String created_at = Helper.waktu();
+    
+    Query.store( 
+      "leave_requests",
+      new String[]{"user_id","reason","status","from_date","until_date","created_at"},
+      new String[]{Service.authId,reason,"1",from_date,until_date,created_at}
+    );
+    System.out.println("Izin Berhasil Dibuat");
+
     Helper.keypress();
 
   };
