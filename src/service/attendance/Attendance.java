@@ -3,6 +3,7 @@ import service.Service;
 import service.ServiceInterface;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -42,8 +43,19 @@ public class Attendance implements ServiceInterface {
     Helper.keypress();
   };
 
-  public static void present() throws IOException {
+  public static void present() throws IOException, SQLException, NoSuchAlgorithmException {
     Helper.banner("Presensi Kehadiran");
+    String waktu = Helper.waktu();
+    System.out.println("Waktu :" + waktu );
+
+    String noted = Helper.insert("Masukkan Catatan:"); 
+    String status = "1";
+    Query.store( 
+      "attendances",
+      new String[]{"user_id","status","attendance_at","note"},
+      new String[]{Service.authId,status,waktu,noted}
+    );
+    System.out.println("Absensi Berhasil");
     Helper.keypress();
   };
 

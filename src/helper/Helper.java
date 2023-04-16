@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public final class Helper {
   public static final String ANSI_RESET = "\u001B[0m";
@@ -92,4 +94,11 @@ public final class Helper {
     }
     return choice;
   }
+
+  public static String waktu() throws IOException{  
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss \n");
+    LocalDateTime getNow = LocalDateTime.now();
+    String waktu = dateTimeFormatter.format(getNow);
+    return waktu;
+  }  
 }
