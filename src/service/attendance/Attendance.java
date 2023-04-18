@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import helper.*;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 public class Attendance implements ServiceInterface {
   public static String TABLE = "attendances";
 
@@ -51,20 +54,33 @@ public class Attendance implements ServiceInterface {
     Helper.keypress();
   }
 
-  public static void present() throws IOException, SQLException, NoSuchAlgorithmException {
+  public static void present() throws IOException, SQLException, NoSuchAlgorithmException, ParseException {
     Helper.banner("Presensi Absensi");
-    String waktu = Helper.waktu();
-    System.out.println("Waktu :" + waktu );
 
-    String noted = Helper.input("Masukkan Catatan:"); 
-    String status = "1";
-    Query.store( 
-      TABLE,
-      new String[]{"user_id","status","attendance_at","note"},
-      new String[]{Service.authId,status,waktu,noted}
-    );
-    System.out.println("Absensi Berhasil");
-    Helper.keypress();
+    ArrayList<String> absent = Query.find("attendances", String.format("WHERE user_id=%s AND DATE(attendance_at) = CURDATE()", Service.authId));
+
+    if(absent.isEmpty()) {
+      String waktu = Helper.waktu();
+      String hour = Helper.waktu("HH:mm");
+
+      SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+      Date d1 = sdf.parse("07:00");
+      Date d2 = sdf.parse(hour);
+
+      System.out.println(d2.getTime() - d1.getTime());
+      System.out.println("Waktu :" + waktu );
+  
+      String noted = Helper.input("Masukkan Catatan: "); 
+      String status = d2.getTime() - d1.getTime() > 0 ? "2" : "1";
+      Query.store( 
+        TABLE,
+        new String[]{"user_id","status","attendance_at","note"},
+        new String[]{Service.authId,status,waktu,noted}
+      );
+      Helper.keypress("success", "Absensi berhasil!");
+    } else {
+      Helper.keypress("info", "Anda sudah absen untuk hari ini, selamat bekerja!");
+    }
   };
 
   public static void history() throws IOException, SQLException {

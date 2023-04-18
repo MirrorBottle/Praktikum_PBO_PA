@@ -4,12 +4,15 @@ import service.Service;
 
 public class App {
     static boolean isRunning = true;
+
     public static void main(String[] args) throws Exception {
         Query.init();
-        Service.admin();
-        while(isRunning) {
+        // Service.admin();
+        
+        Helper.keypress();
+        while (isRunning) {
             Helper.banner("Aplikasi Absensi dan Shift");
-            String choice = Helper.menus(new String[]{"Login", "Jadwal Shift", "Keluar"});
+            String choice = Helper.menus(new String[] { "Login", "Jadwal Shift", "Keluar" });
 
             switch (choice) {
                 case "1":

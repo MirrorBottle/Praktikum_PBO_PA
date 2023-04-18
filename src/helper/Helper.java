@@ -97,14 +97,8 @@ public final class Helper {
   }
 
   public static void keypress(String type, String message) throws IOException {
-    switch (type) {
-      case "success":
-        System.out.print(ANSI_GREEN + message + ANSI_RESET);
-        break;
-      case "error":
-        System.out.print(ANSI_RED + message + ANSI_RESET);
-        break;
-    }
+    String labelColored = Helper.color(message, type);
+    System.out.print(labelColored);
     br.readLine();
   }
 

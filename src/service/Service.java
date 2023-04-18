@@ -3,6 +3,7 @@ package service;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import helper.Helper;
@@ -73,7 +74,7 @@ public class Service {
     }
   }
 
-  public static void user() throws IOException, NoSuchAlgorithmException, SQLException {
+  public static void user() throws IOException, NoSuchAlgorithmException, SQLException, ParseException {
     boolean isRunning = true;
     while (isRunning) {
       Helper.banner("Selamat datang, Pengguna!");
