@@ -19,13 +19,14 @@ public class Service {
   public static String authId = null;
   public static String authUsername = null;
 
-  public static void admin() throws IOException, SQLException, NoSuchAlgorithmException {
+
+  public static void master() throws IOException, SQLException, NoSuchAlgorithmException  {
     boolean isRunning = true;
     while (isRunning) {
       Helper.banner("Selamat datang, " + authUsername);
       String choice = Helper
-          .menus(new String[] { "Manajemen Shift", "Manajemen Kehadiran", "Manajemen Izin", "Manajemen Pengguna",
-              "Log Out" });
+          .menus(new String[] { "Manajemen Shift", "Manajemen Absensi", "Manajemen Izin", "Manajemen Pengguna",
+              "Kembali" });
       switch (choice) {
         case "1":
           Shift.index();
@@ -38,6 +39,32 @@ public class Service {
           break;
         case "4":
           User.index();
+          break;
+        case "5":
+          isRunning = false;
+          break;
+      }
+    }
+  }
+  public static void admin() throws IOException, SQLException, NoSuchAlgorithmException {
+    boolean isRunning = true;
+    while (isRunning) {
+      Helper.banner("Selamat datang, " + authUsername);
+      String choice = Helper
+          .menus(new String[] { "Absensi Hari Ini", "Shift Bulanan", "Approval Izin", "Master Data",
+              "Log Out" });
+      switch (choice) {
+        case "1":
+          Attendance.today();
+          break;
+        case "2":
+          Attendance.index();
+          break;
+        case "3":
+          Leave.index();
+          break;
+        case "4":
+          Service.master();
           break;
         case "5":
           isRunning = false;

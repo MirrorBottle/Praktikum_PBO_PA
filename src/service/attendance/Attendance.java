@@ -9,15 +9,15 @@ import java.util.ArrayList;
 
 import helper.*;
 public class Attendance implements ServiceInterface {
-  public String table = "attendances";
+  public static String TABLE = "attendances";
 
   public static void index() throws IOException {
-    Helper.banner("Manajemen Kehadiran");
+    Helper.banner("Manajemen Absensi");
     Helper.keypress();
   };
 
   public static void show() throws IOException {
-    Helper.banner("Daftar Kehadiran");
+    Helper.banner("Daftar Absensi");
     Helper.keypress();
   };
 
@@ -26,32 +26,40 @@ public class Attendance implements ServiceInterface {
   };
 
   public static void create() throws IOException {
-    Helper.banner("Buat Kehadiran Baru");
+    Helper.banner("Buat Absensi Baru");
     Helper.keypress();
 
   };
 
   public static void edit() throws IOException {
-    Helper.banner("Ubah Kehadiran");
+    Helper.banner("Ubah Absensi");
     Helper.keypress();
 
 
   };
 
   public static void delete() throws IOException {
-    Helper.banner("Hapus Kehadiran");
+    Helper.banner("Hapus Absensi");
     Helper.keypress();
   };
 
+  public static void today() throws IOException, SQLException, NoSuchAlgorithmException  {
+    Helper.banner("Absensi Hari Ini");
+    ArrayList<ArrayList<String>> users = Query.select("SELECT users.id, users.username, IF((SELECT COUNT(*) FROM attendances WHERE attendances.user_id=users.id AND DATE(attendances.attendance_at) = CURDATE() > 0), 'HADIR', 'TIDAK HADIR') AS status FROM users WHERE users.role = 'user'");
+    Table table = Query.datatable(new String[] { "ID", "Username", "Status Kehadiran" }, users);
+    table.print();
+    Helper.keypress();
+  }
+
   public static void present() throws IOException, SQLException, NoSuchAlgorithmException {
-    Helper.banner("Presensi Kehadiran");
+    Helper.banner("Presensi Absensi");
     String waktu = Helper.waktu();
     System.out.println("Waktu :" + waktu );
 
     String noted = Helper.input("Masukkan Catatan:"); 
     String status = "1";
     Query.store( 
-      "attendances",
+      TABLE,
       new String[]{"user_id","status","attendance_at","note"},
       new String[]{Service.authId,status,waktu,noted}
     );
@@ -60,7 +68,7 @@ public class Attendance implements ServiceInterface {
   };
 
   public static void history() throws IOException, SQLException {
-    Helper.banner("History Kehadiran");
+    Helper.banner("History Absensi");
     String[] headers = { "ID", "Status", "Tanggal/Waktu" };
 
     ArrayList<ArrayList<String>> result = Query.select("SELECT attendances.*, users.username FROM attendances JOIN users ON attendances.user_id=users.id WHERE attendances.user_id=" + Service.authId);

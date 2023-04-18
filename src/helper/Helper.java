@@ -147,4 +147,11 @@ public final class Helper {
     String waktu = dateTimeFormatter.format(getNow);
     return waktu;
   }
+
+  public static String waktu(String format) throws IOException {
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
+    LocalDateTime getNow = LocalDateTime.now();
+    String waktu = dateTimeFormatter.format(getNow);
+    return waktu;
+  }
 }
