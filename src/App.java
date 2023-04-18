@@ -7,12 +7,10 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         Query.init();
-        // Service.admin();
-        
-        Helper.keypress();
+        Service.shift();
         while (isRunning) {
             Helper.banner("Aplikasi Absensi dan Shift");
-            String choice = Helper.menus(new String[] { "Login", "Jadwal Shift", "Keluar" });
+            String choice = Helper.menus(new String[] { "Login", "Jadwal Shift Minggu Ini", "Keluar" });
 
             switch (choice) {
                 case "1":

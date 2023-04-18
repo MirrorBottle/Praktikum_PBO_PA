@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
 
 import helper.Helper;
 import helper.Query;
@@ -14,6 +16,15 @@ import service.leave.Leave;
 import service.shift.Shift;
 import service.shift.ShiftItem;
 import service.user.User;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
+import java.util.Calendar;
+import java.util.HashSet;  
 
 public class Service {
 
@@ -136,19 +147,52 @@ public class Service {
   }
 
   public static void shift() throws IOException, SQLException {
-    Helper.banner("Daftar Shift");
-    String[] headers = { "ID", "Karyawan", "Hari", "Jam", "Berlaku Sampai" };
+    LocalDate firstDayOfTheWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+    LocalDate lastDayOfTheWeek = firstDayOfTheWeek.plusDays(6);
 
-    ArrayList<ArrayList<String>> result = Query.select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id");
-    ArrayList<ArrayList<String>> shifts = new ArrayList<>();
-    result.forEach(row -> {
-      ShiftItem shift = new ShiftItem(row);
-      shifts.add(shift.string());
-    });
-    Table table = Query.datatable(headers, shifts);
+    ArrayList<String> days = new ArrayList<String>(Arrays.asList("Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"));
+    ArrayList<String> headers = new  ArrayList<String>();
+    headers.add("Jam");
+    Table table = new Table();
+    table.setShowVerticalLines(true);
+
+    int idx = 0;
+    for (String day: days) {
+      headers.add(day + " (" + Helper.format(firstDayOfTheWeek.plusDays(idx), "dd/MM") + ")");
+      idx++;
+    }
+    table.setHeaders(headers.stream().toArray(String[]::new));    
+
+    ArrayList<ArrayList<String>> shifts = Query.select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id WHERE expired_at IS NULL OR expired_at > " + lastDayOfTheWeek);
+    ArrayList<String> hours = new ArrayList<String>();
+    for(ArrayList<String> shift: shifts) {
+      hours.add(shift.get(3));
+    }
+
+    HashSet<String> hoursSet = new HashSet<String>(hours);
+    hours = new ArrayList<String>(hoursSet);
+
+    for(String hour: hours) {
+      ArrayList<String> hourDays = new ArrayList<String>();
+      hourDays.add(hour);
+      // * GET WORKERS BY HOUR AND DAYS
+      int dayIdx = 1;
+      for (String day: days) {
+        ArrayList<String> dayWorkers = new ArrayList<String>();
+        for (ArrayList<String> shift: shifts) {
+          if (shift.get(2).equals(Integer.toString(dayIdx)) && shift.get(3).equals(hour)) {
+            dayWorkers.add(shift.get(5));
+          };
+        }
+        hourDays.add(String.join(", ", dayWorkers));
+        dayIdx++;
+      }
+      table.addRow(hourDays.stream().toArray(String[]::new));
+      table.addRow(new String[] {"", "", "", "", "", "", "", ""});
+    }
+
+    Helper.banner("Jadwal Shift\n" + Helper.format(firstDayOfTheWeek, "dd/MM/yy") + " s/d " + Helper.format(lastDayOfTheWeek, "dd/MM/yy"));    
     table.print();
     Helper.keypress();
   }
-
-  
 }

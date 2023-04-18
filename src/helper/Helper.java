@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -147,5 +148,9 @@ public final class Helper {
     LocalDateTime getNow = LocalDateTime.now();
     String waktu = dateTimeFormatter.format(getNow);
     return waktu;
+  }
+
+  public static String format(LocalDate date, String format) {
+    return DateTimeFormatter.ofPattern(format).format(date);
   }
 }
