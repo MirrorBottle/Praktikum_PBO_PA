@@ -48,7 +48,7 @@ public class Attendance implements ServiceInterface {
     String waktu = Helper.waktu();
     System.out.println("Waktu :" + waktu );
 
-    String noted = Helper.insert("Masukkan Catatan:"); 
+    String noted = Helper.input("Masukkan Catatan:"); 
     String status = "1";
     Query.store( 
       "attendances",

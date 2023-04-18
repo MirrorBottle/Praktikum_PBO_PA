@@ -30,9 +30,9 @@ public class Leave implements ServiceInterface {
 
   public static void create() throws IOException {
     Helper.banner("Buat Izin Baru");
-    String reason = Helper.insert("Masukkan alasan izin: ");
-    String from_date = Helper.insert("Masukkan tanggal mulai izin (y-m-d): ");
-    String until_date = Helper.insert("Masukkan tanggal akhir izin (y-m-d): ");
+    String reason = Helper.input("Masukkan alasan izin: ");
+    String from_date = Helper.input("Masukkan tanggal mulai izin (y-m-d): ");
+    String until_date = Helper.input("Masukkan tanggal akhir izin (y-m-d): ");
     String created_at = Helper.waktu();
     
     Query.store( 

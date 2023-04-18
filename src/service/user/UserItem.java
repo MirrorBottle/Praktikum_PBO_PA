@@ -15,7 +15,6 @@ public class UserItem extends ServiceItemAbstract {
         this.username = data.get(1);
         this.password = data.get(2);
         this.role = data.get(3);
-
     }
 
     public ArrayList<String> string() {
@@ -23,7 +22,6 @@ public class UserItem extends ServiceItemAbstract {
         user.add(this.id);
         user.add(this.username);
         user.add(this.role);
-
         return user;
     };
 }

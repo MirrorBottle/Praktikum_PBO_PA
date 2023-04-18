@@ -106,7 +106,16 @@ public final class Query {
         query = query + ",'" + value + "'";
       }
       query = query + ")";
-      // System.out.println(query);
+      stmt.execute(query);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public static void delete(String table, String id) {
+    try {
+      stmt = conn.createStatement();
+      String query = "DELETE FROM " + table + " WHERE id=" + id;
       stmt.execute(query);
     } catch (Exception e) {
       System.out.println(e.getMessage());

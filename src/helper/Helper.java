@@ -39,10 +39,41 @@ public final class Helper {
     System.out.println("+++++++++++++++++++++++++++++++++++");
   }
 
-  public static String insert(String label) throws IOException {
+  public static String color(String label, String type) throws IOException {
+    String words = label;
+    switch (type) {
+      case "success":
+        words = ANSI_GREEN + label + ANSI_RESET;
+        break;
+      case "error":
+        words = ANSI_RED + label + ANSI_RESET;
+        break;
+      case "warning":
+        words = ANSI_YELLOW + label + ANSI_RESET;
+        break;
+      case "info":
+        words = ANSI_CYAN + label + ANSI_RESET;
+        break;
+    }
+    return words;
+  }
+
+  public static String input(String label) throws IOException {
     System.out.print(label);
     String val = br.readLine();
     return val;
+  }
+
+  public static String input(String label, String type) throws IOException {
+    String labelColored = Helper.color("Apakah anda yakin (y/n): ", type);
+    System.out.print(labelColored);
+    String val = br.readLine();
+    return val;
+  }
+
+  public static Boolean confirm() throws IOException {
+    String val = Helper.input("Apakah anda yakin (y/n)", "warning");
+    return val.equals("y");
   }
 
   public static void keypress() throws IOException {
@@ -51,12 +82,27 @@ public final class Helper {
   }
 
   public static void keypress(String type) throws IOException {
+    String words = "";
     switch (type) {
       case "success":
-        System.out.print(ANSI_GREEN + "Berhasil! Tekan untuk melanjutkan . . . " + ANSI_RESET);
+        words = "Berhasil! Tekan untuk melanjutkan . . . ";
         break;
       case "error":
-        System.out.print(ANSI_RED + "Gagal! Tekan untuk melanjutkan . . . " + ANSI_RESET);
+        words = "Gagal! Tekan untuk melanjutkan . . . ";
+        break;
+    }
+    words = Helper.color(words, type);
+    System.out.println(words);
+    br.readLine();
+  }
+
+  public static void keypress(String type, String message) throws IOException {
+    switch (type) {
+      case "success":
+        System.out.print(ANSI_GREEN + message + ANSI_RESET);
+        break;
+      case "error":
+        System.out.print(ANSI_RED + message + ANSI_RESET);
         break;
     }
     br.readLine();
@@ -83,7 +129,7 @@ public final class Helper {
         System.out.println(idx + ". " + menu);
         idx++;
       }
-      choice = insert("Masukkan pilihan: ");
+      choice = Helper.input("Masukkan pilihan: ");
       isCorrect = Integer.parseInt(choice) <= menus.length && Integer.parseInt(choice) > 0;
       if (!isCorrect) {
         int lines = menus.length + 1;
@@ -95,10 +141,10 @@ public final class Helper {
     return choice;
   }
 
-  public static String waktu() throws IOException{  
+  public static String waktu() throws IOException {
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss \n");
     LocalDateTime getNow = LocalDateTime.now();
     String waktu = dateTimeFormatter.format(getNow);
     return waktu;
-  }  
+  }
 }

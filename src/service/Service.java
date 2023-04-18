@@ -19,7 +19,7 @@ public class Service {
   public static String authId = null;
   public static String authUsername = null;
 
-  public static void admin() throws IOException, SQLException {
+  public static void admin() throws IOException, SQLException, NoSuchAlgorithmException {
     boolean isRunning = true;
     while (isRunning) {
       Helper.banner("Selamat datang, " + authUsername);
@@ -83,8 +83,8 @@ public class Service {
 
     while(!isLogin) {
       Helper.banner("Login");
-      String username = Helper.insert("Masukkan username: ");
-      String password = Helper.insert("Masukkan password: ");
+      String username = Helper.input("Masukkan username: ");
+      String password = Helper.input("Masukkan password: ");
       try {
         String hashed = Helper.hash(password);
         ArrayList<String> user = Query.find("users", String.format("WHERE username='%s' AND password='%s'", username, hashed));
