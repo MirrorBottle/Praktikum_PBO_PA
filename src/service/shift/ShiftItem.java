@@ -10,7 +10,7 @@ public class ShiftItem extends ServiceItemAbstract {
   public String day;
   public String hour;
   public String expired_at;
-  public String user_name;
+  public String username;
 
   public ShiftItem(ArrayList<String> data) {
     this.id = data.get(0);
@@ -18,7 +18,7 @@ public class ShiftItem extends ServiceItemAbstract {
     this.day = data.get(2);
     this.hour = data.get(3);
     this.expired_at = data.get(4);
-    this.user_name = data.get(5);
+    this.username = data.get(5);
   }
 
   public String getDayName() {
@@ -58,7 +58,7 @@ public class ShiftItem extends ServiceItemAbstract {
   public ArrayList<String> string() {
     ArrayList<String> shift = new ArrayList<>();
     shift.add(this.id);
-    shift.add(this.user_name);
+    shift.add(this.username);
     shift.add(this.getDayName());
     shift.add(this.hour);
     shift.add(this.getExpiredAt());

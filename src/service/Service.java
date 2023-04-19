@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 import helper.Helper;
 import helper.Query;
@@ -14,16 +13,11 @@ import helper.Table;
 import service.attendance.Attendance;
 import service.leave.Leave;
 import service.shift.Shift;
-import service.shift.ShiftItem;
 import service.user.User;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.WeekFields;
-import java.util.Calendar;
 import java.util.HashSet;  
 
 public class Service {
@@ -73,7 +67,7 @@ public class Service {
           Attendance.index();
           break;
         case "3":
-          Leave.index();
+          Leave.approval();
           break;
         case "4":
           Service.master();

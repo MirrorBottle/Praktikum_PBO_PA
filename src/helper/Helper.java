@@ -153,4 +153,9 @@ public final class Helper {
   public static String format(LocalDate date, String format) {
     return DateTimeFormatter.ofPattern(format).format(date);
   }
+
+  public static String format(String date) {
+    LocalDate parsedDate = LocalDate.parse(date);
+    return DateTimeFormatter.ofPattern("dd/MM/yy").format(parsedDate);
+  }
 }

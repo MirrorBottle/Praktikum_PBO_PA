@@ -10,7 +10,7 @@ public class AttendanceItem extends ServiceItemAbstract {
     public String status;
     public String attendance_at;
     public String note;
-    public String user_name;
+    public String username;
 
     public AttendanceItem(ArrayList<String> data) {
         this.id = data.get(0);
@@ -18,7 +18,7 @@ public class AttendanceItem extends ServiceItemAbstract {
         this.status = data.get(2);
         this.attendance_at = data.get(3);
         this.note = data.get(4);
-        this.user_name = data.get(5);
+        this.username = data.get(5);
     }
 
     public String getStatusName() {

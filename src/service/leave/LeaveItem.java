@@ -2,6 +2,8 @@ package service.leave;
 
 import java.util.ArrayList;
 
+import helper.Helper;
+
 public class LeaveItem {
     public String id;
     public String user_id;
@@ -10,7 +12,7 @@ public class LeaveItem {
     public String from_date;
     public String until_date;
     public String created_at;
-    public String user_name;
+    public String username;
 
     public LeaveItem(ArrayList<String> data) {
         this.id = data.get(0);
@@ -20,7 +22,7 @@ public class LeaveItem {
         this.from_date = data.get(4);
         this.until_date = data.get(5);
         this.created_at = data.get(6);
-        this.user_name = data.get(7);
+        this.username = data.get(7);
     }
 
     public String getStatusName() {
@@ -49,6 +51,16 @@ public class LeaveItem {
         leave.add(this.until_date);
         leave.add(this.getStatusName());
         leave.add(this.created_at);
+        return leave;
+    };
+
+    public ArrayList<String> approval() {
+        ArrayList<String> leave = new ArrayList<>();
+        leave.add(this.id);
+        leave.add(this.username);
+        leave.add(this.reason);
+        leave.add(Helper.format(this.from_date));
+        leave.add(Helper.format(this.until_date));
         return leave;
     };
 }
