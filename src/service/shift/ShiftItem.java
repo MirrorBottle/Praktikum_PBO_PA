@@ -64,4 +64,13 @@ public class ShiftItem extends ServiceItemAbstract {
     shift.add(this.getExpiredAt());
     return shift;
   };
+
+  public ArrayList<String> user() {
+    ArrayList<String> shift = new ArrayList<>();
+    shift.add(this.id);
+    shift.add(this.getDayName());
+    shift.add(this.hour);
+    shift.add(this.getExpiredAt());
+    return shift;
+  };
 }

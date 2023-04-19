@@ -11,9 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 
 import helper.*;
 
@@ -165,14 +163,14 @@ public class Shift implements ServiceInterface {
 
   public static void user() throws IOException, SQLException {
     Helper.banner("Jadwal Shift");
-    String[] headers = { "ID", "Karyawan", "Hari", "Jam", "Berlaku Sampai" };
+    String[] headers = { "ID", "Hari", "Jam", "Berlaku Sampai" };
     ArrayList<ArrayList<String>> result = Query.select(
         "SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id WHERE shifts.user_id="
             + Service.authId);
     ArrayList<ArrayList<String>> shifts = new ArrayList<>();
     result.forEach(row -> {
       ShiftItem shift = new ShiftItem(row);
-      shifts.add(shift.string());
+      shifts.add(shift.user());
     });
     Table table = Query.datatable(headers, shifts);
     table.print();
