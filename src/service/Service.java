@@ -62,7 +62,7 @@ public class Service {
           Attendance.today();
           break;
         case "2":
-          Attendance.index();
+          Shift.monthly();
           break;
         case "3":
           Leave.approval();

@@ -8,10 +8,14 @@ import service.user.UserItem;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 
 import helper.*;
 
@@ -81,8 +85,32 @@ public class Shift implements ServiceInterface {
     return table;
   }
 
-  public static void monthly() throws IOException {
+  public static void monthly() throws IOException, SQLException {
     Helper.banner("Shift (Bulanan)");
+    LocalDate today = LocalDate.now();
+
+    LocalDate firstMonday = today.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY));
+    LocalDate secondMonday = firstMonday.plusDays(7);
+    LocalDate thirdMonday = secondMonday.plusDays(7);
+    LocalDate fourthMonday = thirdMonday.plusDays(7);
+
+    LocalDate firstWeekEnd = firstMonday.plusDays(6);
+    LocalDate secondWeekEnd = firstMonday.plusDays(6);
+    LocalDate thirdWeekEnd = firstMonday.plusDays(6);
+    LocalDate fourthWeekEnd = firstMonday.plusDays(6);
+
+    Table firstWeek = Shift.weekly(firstMonday, firstWeekEnd);
+    Table secondWeek = Shift.weekly(secondMonday, secondWeekEnd);
+    Table thirdWeek = Shift.weekly(thirdMonday, thirdWeekEnd);
+    Table fourthWeek = Shift.weekly(fourthMonday, fourthWeekEnd);
+
+
+    System.out.println("Tgl. " + Helper.format(firstMonday, "dd/MM/yy") + " s/d " + Helper.format(fourthWeekEnd, "dd/MM/yy"));
+    firstWeek.print();
+    secondWeek.print();
+    thirdWeek.print();
+    fourthWeek.print();
+
     Helper.keypress();
   };
 
