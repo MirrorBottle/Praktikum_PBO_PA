@@ -13,19 +13,20 @@ import helper.Table;
 
 public class Leave implements ServiceInterface {
   public static String TABLE = "leave_requests";
+  public static String[] HEADERS = { "ID", "Karyawan", "Alasan", "Dari Tgl.", "Sampai Tgl.", "Status", "Tgl. Dibuat" };
 
-  public static void index() throws IOException {
-    Helper.banner("Manajemen Izin");
-    Helper.keypress();
-  };
-
-  public static void show() throws IOException {
+  public static void list() throws IOException, SQLException {
     Helper.banner("Daftar Izin");
+    ArrayList<ArrayList<String>> result = Query
+        .select("SELECT leave_requests.*, users.username FROM leave_requests JOIN users ON leave_requests.user_id=users.id ORDER BY id DESC");
+    ArrayList<ArrayList<String>> leave_requests = new ArrayList<>();
+    result.forEach(row -> {
+      LeaveItem leave_request = new LeaveItem(row);
+      leave_requests.add(leave_request.admin());
+    });
+    Table table = Query.datatable(HEADERS, leave_requests);
+    table.print();
     Helper.keypress();
-  };
-
-  public static void show(String id) {
-
   };
 
   public static void create() throws IOException {
@@ -34,13 +35,11 @@ public class Leave implements ServiceInterface {
     String from_date = Helper.input("Masukkan tanggal mulai izin (y-m-d): ");
     String until_date = Helper.input("Masukkan tanggal akhir izin (y-m-d): ");
     String created_at = Helper.waktu();
-
     Query.store(
         "leave_requests",
         new String[] { "user_id", "reason", "status", "from_date", "until_date", "created_at" },
         new String[] { Service.authId, reason, "1", from_date, until_date, created_at });
     System.out.println("Izin Berhasil Dibuat");
-
     Helper.keypress();
 
   };
@@ -77,9 +76,9 @@ public class Leave implements ServiceInterface {
 
     while (true) {
       Helper.banner("Approval Izin");
-      String[] headers = { "ID", "Pengguna", "Alasan", "Dari Tgl.", "Sampai Tgl." };
+      String[] headers = { "ID", "Karyawan", "Alasan", "Dari Tgl.", "Sampai Tgl." };
       ArrayList<ArrayList<String>> result = Query.select(
-          "SELECT leave_requests.*, users.username FROM leave_requests JOIN users ON leave_requests.user_id=users.id WHERE status=1");
+          "SELECT leave_requests.*, users.username FROM leave_requests JOIN users ON leave_requests.user_id=users.id WHERE status=1 ORDER BY id DESC");
 
       if (result.isEmpty()) {
         Helper.keypress("info", "Tidak ada izin yang perlu approval . . . ");
@@ -115,6 +114,34 @@ public class Leave implements ServiceInterface {
         }
       }
       break;
+    }
+  };
+
+  public static void index() throws IOException, SQLException {
+    boolean isRunning = true;
+
+    while (isRunning) {
+      Helper.banner("Manajemen Izin");
+      String choice = Helper
+          .menus(new String[] { "Lihat Daftar Shift", "Tambah Shift", "Ubah Shift",
+              "Hapus Shift", "Kembali" });
+      switch (choice) {
+        case "1":
+          Leave.list();
+          break;
+        case "2":
+          Leave.create();
+          break;
+        case "3":
+          Leave.edit();
+          break;
+        case "4":
+          Leave.delete();
+          break;
+        default:
+          isRunning = false;
+          break;
+      }
     }
   };
 }

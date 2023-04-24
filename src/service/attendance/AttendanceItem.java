@@ -1,7 +1,9 @@
 package service.attendance;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
+import helper.Helper;
 import service.ServiceItemAbstract;
 
 public class AttendanceItem extends ServiceItemAbstract {
@@ -25,12 +27,27 @@ public class AttendanceItem extends ServiceItemAbstract {
         return this.status.equals("1") ? "Tepat Waktu" : "Terlambat";
     }
 
+    public String getNote() {
+        return Objects.isNull(this.note) ? "-" : this.note;
+    }
+
     public ArrayList<String> string() {
-        ArrayList<String> shift = new ArrayList<>();
-        shift.add(this.id);
-        shift.add(this.getStatusName());
-        shift.add(this.attendance_at);
-        return shift;
+        ArrayList<String> attendance = new ArrayList<>();
+        attendance.add(this.id);
+        attendance.add(this.getStatusName());
+        attendance.add(Helper.format(this.attendance_at, "yyyy-MM-dd HH:mm:ss", "dd/MM/yy HH:mm"));
+        attendance.add(this.getNote());
+        return attendance;
+    };
+
+    public ArrayList<String> admin() {
+        ArrayList<String> attendance = new ArrayList<>();
+        attendance.add(this.id);
+        attendance.add(this.username);
+        attendance.add(this.getStatusName());
+        attendance.add(Helper.format(this.attendance_at, "yyyy-MM-dd HH:mm:ss", "dd/MM/yy HH:mm"));
+        attendance.add(this.getNote());
+        return attendance;
     };
 
 }

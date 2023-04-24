@@ -16,7 +16,7 @@ public class User implements ServiceInterface {
 
   public static void list() throws IOException, SQLException {
     Helper.banner("Daftar Pengguna");
-    ArrayList<ArrayList<String>> result = Query.select("SELECT * FROM " + TABLE);
+    ArrayList<ArrayList<String>> result = Query.select("SELECT * FROM " + TABLE + " ORDER BY id DESC");
     ArrayList<ArrayList<String>> users = new ArrayList<>();
     result.forEach(row -> {
       UserItem user = new UserItem(row);
@@ -29,15 +29,16 @@ public class User implements ServiceInterface {
 
   public static UserItem find() throws IOException, SQLException, NoSuchAlgorithmException {
     while(true) {
-      String id = Helper.input("Masukkan ID Pengguna: ");
+      String id = Helper.input("Masukkan ID Karyawan: ");
       ArrayList<String> userData = Query.find(TABLE, Integer.parseInt(id));
       if (!userData.isEmpty()) {
         UserItem user = new UserItem(userData);
         return user;
       } else {
-        Helper.keypress("error", "Pengguna tidak ada!");
+        Helper.keypress("error", "Karyawan tidak ada!");
         System.out.print(String.format("\033[%dA",1)); // Move up
         System.out.print("\033[2K"); 
+        System.out.flush();
       }
     }
   };
@@ -47,7 +48,7 @@ public class User implements ServiceInterface {
       Helper.banner("Buat Pengguna Baru");
       String username = Helper.input("Masukkan Username: ");
       String password = Helper.input("Masukkan Password: ");
-      String role = Helper.input("Masukkan Hak Akses (1 = admin, 2 = pengguna): ");
+      String role = Helper.input("Masukkan Hak Akses (1 = admin, 2 = karyawan): ");
       ArrayList<String> user = Query.find(TABLE, String.format("WHERE username='%s'", username));
 
       if (user.isEmpty()) {
@@ -70,7 +71,7 @@ public class User implements ServiceInterface {
       UserItem user = User.find();
       String username = Helper.input(String.format("Masukkan username (%s): ", user.username));
       String password = Helper.input("Masukkan password: ");
-      String role = Helper.input("Masukkan hak akses (1 = admin, 2 = pengguna): ");
+      String role = Helper.input("Masukkan hak akses (1 = admin, 2 = karyawan): ");
 
       ArrayList<String> userFindSameUsername = Query.find(TABLE,
           String.format("WHERE username='%s' AND id<>%s", username, user.id));

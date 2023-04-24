@@ -26,7 +26,7 @@ public class Shift implements ServiceInterface {
   public static void list() throws IOException, SQLException {
     Helper.banner("Daftar Shift");
     ArrayList<ArrayList<String>> result = Query
-        .select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id");
+        .select("SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id ORDER BY id DESC");
     ArrayList<ArrayList<String>> shifts = new ArrayList<>();
     result.forEach(row -> {
       ShiftItem shift = new ShiftItem(row);
@@ -118,7 +118,7 @@ public class Shift implements ServiceInterface {
     while (true) {
       Helper.banner("Buat Shift Baru");
       UserItem user = User.find();
-      System.out.println("Pengguna: " + user.username);
+      System.out.println("Karyawan: " + user.username);
       String day = Helper.input("Masukkan hari (1 = Senin ... 7 = Minggu): ");
       String hour = Helper.input("Masukkan jam kerja (exa: 10:00 - 12:00): ");
       String expired_at = Helper.input("Masukkan masa berlaku shift (yyyy-mm-dd) (kosongkan apabila seterusnya): ");
@@ -146,7 +146,7 @@ public class Shift implements ServiceInterface {
 
       if (!shift.isEmpty()) {
         UserItem user = User.find();
-        System.out.println("Pengguna: " + user.username);
+        System.out.println("Karyawan: " + user.username);
         String day = Helper.input("Masukkan hari (1 = Senin ... 7 = Minggu): ");
         String hour = Helper.input("Masukkan jam kerja (exa: 10:00 - 12:00): ");
         String expired_at = Helper.input("Masukkan masa berlaku shift (yyyy-mm-dd) (kosongkan apabila seterusnya): ");
@@ -194,7 +194,7 @@ public class Shift implements ServiceInterface {
     String[] headers = { "ID", "Hari", "Jam", "Berlaku Sampai" };
     ArrayList<ArrayList<String>> result = Query.select(
         "SELECT shifts.*, users.username FROM shifts JOIN users ON shifts.user_id=users.id WHERE shifts.user_id="
-            + Service.authId);
+            + Service.authId + " ORDER BY id DESC");
     ArrayList<ArrayList<String>> shifts = new ArrayList<>();
     result.forEach(row -> {
       ShiftItem shift = new ShiftItem(row);

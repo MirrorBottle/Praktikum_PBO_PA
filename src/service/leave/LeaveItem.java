@@ -47,10 +47,22 @@ public class LeaveItem {
         ArrayList<String> leave = new ArrayList<>();
         leave.add(this.id);
         leave.add(this.reason);
-        leave.add(this.from_date);
-        leave.add(this.until_date);
+        leave.add(Helper.format(this.from_date));
+        leave.add(Helper.format(this.until_date));
         leave.add(this.getStatusName());
-        leave.add(this.created_at);
+        leave.add(Helper.format(this.created_at, "yyyy-MM-dd HH:mm:ss", "dd/MM/yy"));
+        return leave;
+    };
+
+    public ArrayList<String> admin() {
+        ArrayList<String> leave = new ArrayList<>();
+        leave.add(this.id);
+        leave.add(this.username);
+        leave.add(this.reason);
+        leave.add(Helper.format(this.from_date));
+        leave.add(Helper.format(this.until_date));
+        leave.add(this.getStatusName());
+        leave.add(Helper.format(this.created_at, "yyyy-MM-dd HH:mm:ss", "dd/MM/yy"));
         return leave;
     };
 

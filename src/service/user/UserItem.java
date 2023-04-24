@@ -17,11 +17,15 @@ public class UserItem extends ServiceItemAbstract {
         this.role = data.get(3);
     }
 
+    public String getRoleName() {
+        return this.role.equals("admin") ? "Admin" : "Karyawan";
+    }
+
     public ArrayList<String> string() {
         ArrayList<String> user = new ArrayList<>();
         user.add(this.id);
         user.add(this.username);
-        user.add(this.role);
+        user.add(this.getRoleName());
         return user;
     };
 }

@@ -137,7 +137,7 @@ public final class Helper {
   }
 
   public static String waktu() throws IOException {
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss \n");
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     LocalDateTime getNow = LocalDateTime.now();
     String waktu = dateTimeFormatter.format(getNow);
     return waktu;
@@ -152,6 +152,12 @@ public final class Helper {
 
   public static String format(LocalDate date, String format) {
     return DateTimeFormatter.ofPattern(format).format(date);
+  }
+
+  public static String format(String date, String fromFormat, String toFormat) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fromFormat);
+    LocalDateTime lt = LocalDateTime.parse(date, formatter);
+    return DateTimeFormatter.ofPattern(toFormat).format(lt);
   }
 
   public static String format(String date) {
