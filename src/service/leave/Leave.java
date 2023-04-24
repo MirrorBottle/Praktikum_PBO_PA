@@ -31,9 +31,9 @@ public class Leave implements ServiceInterface {
 
   public static void create() throws IOException {
     Helper.banner("Buat Izin Baru");
-    String reason = Helper.input("Masukkan alasan izin: ");
-    String from_date = Helper.input("Masukkan tanggal mulai izin (y-m-d): ");
-    String until_date = Helper.input("Masukkan tanggal akhir izin (y-m-d): ");
+    String reason = Helper.input("Masukkan alasan izin: ", "required");
+    String from_date = Helper.input("Masukkan tanggal mulai izin (yyyy-mm-dd): ", "date");
+    String until_date = Helper.input("Masukkan tanggal akhir izin (yyyy-mm-dd): ", "date");
     String created_at = Helper.waktu();
     Query.store(
         "leave_requests",
@@ -92,12 +92,12 @@ public class Leave implements ServiceInterface {
         Table table = Query.datatable(headers, leave_requests);
         table.print();
 
-        String id = Helper.input("Masukkan ID Izin (0 = kembali): ");
+        String id = Helper.input("Masukkan ID Izin (0 = kembali): ", "required");
         if (!id.equals("0")) {
           ArrayList<String> leave = Query.find(TABLE, Integer.parseInt(id));
 
           if (!leave.isEmpty()) {
-            String status = Helper.input("Masukkan approval (2 = Setuju, 3 = TIdak Setuju): ");
+            String status = Helper.input("Masukkan approval (2 = Setuju, 3 = TIdak Setuju): ", "required");
 
             if (status.equals("2") || status.equals("3")) {
               Query.update(

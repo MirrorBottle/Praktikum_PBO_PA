@@ -12,7 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -104,8 +105,8 @@ public class Shift implements ServiceInterface {
     Table thirdWeek = Shift.weekly(thirdMonday, thirdWeekEnd);
     Table fourthWeek = Shift.weekly(fourthMonday, fourthWeekEnd);
 
-
-    System.out.println("Tgl. " + Helper.format(firstMonday, "dd/MM/yy") + " s/d " + Helper.format(fourthWeekEnd, "dd/MM/yy"));
+    System.out
+        .println("Tgl. " + Helper.format(firstMonday, "dd/MM/yy") + " s/d " + Helper.format(fourthWeekEnd, "dd/MM/yy"));
     firstWeek.print();
     secondWeek.print();
     thirdWeek.print();
@@ -119,12 +120,21 @@ public class Shift implements ServiceInterface {
       Helper.banner("Buat Shift Baru");
       UserItem user = User.find();
       System.out.println("Karyawan: " + user.username);
-      String day = Helper.input("Masukkan hari (1 = Senin ... 7 = Minggu): ");
-      String hour = Helper.input("Masukkan jam kerja (exa: 10:00 - 12:00): ");
+      String day = Helper.input("Masukkan hari (1 = Senin ... 7 = Minggu): ", "required");
+      String hour = Helper.input("Masukkan jam kerja (exa: 10:00 - 12:00): ", "time");
       String expired_at = Helper.input("Masukkan masa berlaku shift (yyyy-mm-dd) (kosongkan apabila seterusnya): ");
 
       if (Integer.parseInt(day) > 0 && Integer.parseInt(day) <= 7) {
-        expired_at = expired_at.isEmpty() ? "NULL" : expired_at;
+        if (!expired_at.isEmpty()) {
+          Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+          Matcher matcher = pattern.matcher(expired_at);
+          if (!matcher.matches()) {
+            Helper.keypress("error", "Format masa berlaku tidak sesuai!");
+            continue;
+          }
+        } else {
+          expired_at = "NULL";
+        }
         Query.store(
             TABLE,
             new String[] { "user_id", "day", "hour", "expired_at" },
@@ -141,18 +151,27 @@ public class Shift implements ServiceInterface {
     while (true) {
       Helper.banner("Ubah Shift");
 
-      String id = Helper.input("Masukkan ID Shift: ");
+      String id = Helper.input("Masukkan ID Shift: ", "required");
       ArrayList<String> shift = Query.find(TABLE, Integer.parseInt(id));
 
       if (!shift.isEmpty()) {
         UserItem user = User.find();
         System.out.println("Karyawan: " + user.username);
-        String day = Helper.input("Masukkan hari (1 = Senin ... 7 = Minggu): ");
-        String hour = Helper.input("Masukkan jam kerja (exa: 10:00 - 12:00): ");
+        String day = Helper.input("Masukkan hari (1 = Senin ... 7 = Minggu): ", "required");
+        String hour = Helper.input("Masukkan jam kerja (exa: 10:00 - 12:00): ", "time");
         String expired_at = Helper.input("Masukkan masa berlaku shift (yyyy-mm-dd) (kosongkan apabila seterusnya): ");
 
         if (Integer.parseInt(day) > 0 && Integer.parseInt(day) <= 7) {
-          expired_at = expired_at.isEmpty() ? "NULL" : expired_at;
+          if (!expired_at.isEmpty()) {
+            Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+            Matcher matcher = pattern.matcher(expired_at);
+            if (!matcher.matches()) {
+              Helper.keypress("error", "Format masa berlaku tidak sesuai!");
+              continue;
+            }
+          } else {
+            expired_at = "NULL";
+          }
           Query.update(
               TABLE,
               shift.get(0),
@@ -173,7 +192,7 @@ public class Shift implements ServiceInterface {
     while (true) {
       Helper.banner("Hapus Shift");
 
-      String id = Helper.input("Masukkan ID Shift: ");
+      String id = Helper.input("Masukkan ID Shift: ", "required");
       ArrayList<String> shift = Query.find(TABLE, Integer.parseInt(id));
 
       if (!shift.isEmpty()) {

@@ -9,6 +9,8 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Helper {
   public static final String ANSI_RESET = "\u001B[0m";
@@ -65,15 +67,47 @@ public final class Helper {
     return val;
   }
 
-  public static String input(String label, String type) throws IOException {
-    String labelColored = Helper.color("Apakah anda yakin (y/n): ", type);
-    System.out.print(labelColored);
-    String val = br.readLine();
-    return val;
+  public static String input(String label, String validation) throws IOException {
+    String input = null;
+    boolean isValid = false;
+    
+    while (!isValid) {
+        input = Helper.input(label);
+        if (input.isEmpty()) {
+            System.out.println(Helper.color("Input tidak boleh kosong!", "error"));
+            continue;
+        }
+        
+        if(!validation.equals("required")) {
+          Pattern pattern = null;
+          switch (validation) {
+            case "date":
+              pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+              break;
+            case "time":
+              pattern = Pattern.compile("^\\d{2}:\\d{2}\\s-\\s\\d{2}:\\d{2}$");
+              break;
+            case "datetime":
+              pattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}");
+              break;
+          }
+          Matcher matcher = pattern.matcher(input);
+          if (matcher.matches()) {
+              isValid = true;
+          } else {
+            System.out.println(Helper.color("Format input tidak cocok!", "error"));
+          }
+        } else {
+          isValid = true;
+        }
+    }
+    return input;
   }
 
   public static Boolean confirm() throws IOException {
-    String val = Helper.input("Apakah anda yakin (y/n)", "warning");
+    String labelColored = Helper.color("Apakah anda yakin (y/n): ", "warning");
+    System.out.print(labelColored);
+    String val = br.readLine();
     return val.equals("y");
   }
 
@@ -124,7 +158,7 @@ public final class Helper {
         System.out.println(idx + ". " + menu);
         idx++;
       }
-      choice = Helper.input("Masukkan pilihan: ");
+      choice = Helper.input("Masukkan pilihan: ", "required");
       isCorrect = Integer.parseInt(choice) <= menus.length && Integer.parseInt(choice) > 0;
       if (!isCorrect) {
         int lines = menus.length + 1;

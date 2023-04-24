@@ -39,8 +39,8 @@ public class Attendance implements ServiceInterface {
       System.out.println(Helper.color("[INPUT ADMIN] akan dimasukkan ke dalam catatan secara otomatis!", "info"));
       UserItem user = User.find();
       System.out.println("Karyawan: " + user.username);
-      String attendance_at = Helper.input("Masukkan Waktu (yyyy-mm-dd hh:mm): ");
-      String status = Helper.input("Masukkan status (1 = Tepat Waktu, 2 = Terlambat): ");
+      String attendance_at = Helper.input("Masukkan Waktu (yyyy-mm-dd hh:mm): ", "datetime");
+      String status = Helper.input("Masukkan status (1 = Tepat Waktu, 2 = Terlambat): ", "required");
       String note = Helper.input("Masukkan catatan: ");
       note = "[INPUT ADMIN] " + note;
       attendance_at = attendance_at + ":00";

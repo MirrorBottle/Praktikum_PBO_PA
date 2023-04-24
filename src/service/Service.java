@@ -114,8 +114,8 @@ public class Service {
 
     while(!isLogin) {
       Helper.banner("Login");
-      String username = Helper.input("Masukkan username: ");
-      String password = Helper.input("Masukkan password: ");
+      String username = Helper.input("Masukkan username: ", "required");
+      String password = Helper.input("Masukkan password: ", "required");
       try {
         String hashed = Helper.hash(password);
         ArrayList<String> user = Query.find("users", String.format("WHERE username='%s' AND password='%s'", username, hashed));
