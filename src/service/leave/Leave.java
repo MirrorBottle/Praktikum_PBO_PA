@@ -2,8 +2,11 @@ package service.leave;
 
 import service.Service;
 import service.ServiceInterface;
+import service.user.User;
+import service.user.UserItem;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -29,8 +32,10 @@ public class Leave implements ServiceInterface {
     Helper.keypress();
   };
 
-  public static void create() throws IOException {
+  public static void create() throws IOException, NoSuchAlgorithmException, SQLException {
     Helper.banner("Buat Izin Baru");
+    UserItem user = User.find();
+    System.out.println("Karyawan: " + user.username);
     String reason = Helper.input("Masukkan alasan izin: ", "required");
     String from_date = Helper.input("Masukkan tanggal mulai izin (yyyy-mm-dd): ", "date");
     String until_date = Helper.input("Masukkan tanggal akhir izin (yyyy-mm-dd): ", "date");
@@ -38,21 +43,56 @@ public class Leave implements ServiceInterface {
     Query.store(
         "leave_requests",
         new String[] { "user_id", "reason", "status", "from_date", "until_date", "created_at" },
-        new String[] { Service.authId, reason, "1", from_date, until_date, created_at });
+        new String[] { user.id, reason, "1", from_date, until_date, created_at });
     System.out.println("Izin Berhasil Dibuat");
     Helper.keypress();
 
   };
 
-  public static void edit() throws IOException {
-    Helper.banner("Ubah Izin");
-    Helper.keypress();
+  public static void edit() throws IOException, NoSuchAlgorithmException, SQLException {
+    while (true) {
+      Helper.banner("Ubah Izin");
+
+      String id = Helper.input("Masukkan ID Izin: ", "required");
+      ArrayList<String> leave = Query.find(TABLE, Integer.parseInt(id));
+
+      if (!leave.isEmpty()) {
+        UserItem user = User.find();
+        System.out.println("Karyawan: " + user.username);
+        String reason = Helper.input("Masukkan alasan izin: ", "required");
+        String from_date = Helper.input("Masukkan tanggal mulai izin (yyyy-mm-dd): ", "date");
+        String until_date = Helper.input("Masukkan tanggal akhir izin (yyyy-mm-dd): ", "date");
+        String created_at = Helper.waktu();
+        Query.update(
+            "leave_requests",
+            leave.get(0),
+            new String[] { "user_id", "reason", "status", "from_date", "until_date", "created_at" },
+            new String[] { user.id, reason, "1", from_date, until_date, created_at });
+        Helper.keypress("success", "Izin berhasil diubah!");
+        break;
+      } else {
+        Helper.keypress("error", "Izin tidak ada!");
+      }
+    }
 
   };
 
-  public static void delete() throws IOException {
-    Helper.banner("Hapus Izin");
-    Helper.keypress();
+  public static void delete() throws IOException, NumberFormatException, SQLException {
+    while (true) {
+      Helper.banner("Hapus Izin");
+      String id = Helper.input("Masukkan ID Izin: ", "required");
+      ArrayList<String> attendance = Query.find(TABLE, Integer.parseInt(id));
+      if (!attendance.isEmpty()) {
+        Boolean isConfirmed = Helper.confirm();
+        if (isConfirmed) {
+          Query.delete(TABLE, attendance.get(0));
+          Helper.keypress("success", "Izin berhasil dihapus!");
+        }
+        break;
+      } else {
+        Helper.keypress("error", "Izin tidak ada!");
+      }
+    }
   };
 
   public static void history() throws IOException, SQLException {
@@ -117,7 +157,7 @@ public class Leave implements ServiceInterface {
     }
   };
 
-  public static void index() throws IOException, SQLException {
+  public static void index() throws IOException, SQLException, NoSuchAlgorithmException {
     boolean isRunning = true;
 
     while (isRunning) {

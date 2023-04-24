@@ -8,7 +8,6 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         Query.init();
-        Shift.create();
         while (isRunning) {
             Helper.banner("Aplikasi Absensi dan Shift");
             String choice = Helper.menus(new String[] { "Login", "Jadwal Shift Minggu Ini", "Keluar" });

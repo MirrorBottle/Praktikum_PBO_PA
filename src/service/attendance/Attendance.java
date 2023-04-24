@@ -53,15 +53,50 @@ public class Attendance implements ServiceInterface {
     }
   };
 
-  public static void edit() throws IOException {
-    Helper.banner("Ubah Absensi");
-    Helper.keypress();
+  public static void edit() throws IOException, NoSuchAlgorithmException, SQLException {
+    while (true) {
+      Helper.banner("Ubah Absensi");
+      System.out.println(Helper.color("[INPUT ADMIN] akan dimasukkan ke dalam catatan secara otomatis!", "info"));
 
+      String id = Helper.input("Masukkan ID Izin: ", "required");
+      ArrayList<String> attendance = Query.find(TABLE, Integer.parseInt(id));
+
+      if(!attendance.isEmpty()) {
+        UserItem user = User.find();
+        System.out.println("Karyawan: " + user.username);
+        String attendance_at = Helper.input("Masukkan Waktu (yyyy-mm-dd hh:mm): ", "datetime");
+        String status = Helper.input("Masukkan status (1 = Tepat Waktu, 2 = Terlambat): ", "required");
+        String note = Helper.input("Masukkan catatan: ");
+        note = "[INPUT ADMIN] " + note;
+        attendance_at = attendance_at + ":00";
+        Query.store(
+            TABLE,
+            new String[] { "user_id", "status", "attendance_at", "note" },
+            new String[] { user.id, status, attendance_at, note });
+        Helper.keypress("success", "Absensi berhasil ditambah!");
+        break;
+      } else {
+        Helper.keypress("error", "Absensi tidak ada!");
+      }
+    }
   };
 
-  public static void delete() throws IOException {
-    Helper.banner("Hapus Absensi");
-    Helper.keypress();
+  public static void delete() throws IOException, NumberFormatException, SQLException {
+    while (true) {
+      Helper.banner("Hapus Absensi");
+      String id = Helper.input("Masukkan ID Absensi: ", "required");
+      ArrayList<String> attendance = Query.find(TABLE, Integer.parseInt(id));
+      if (!attendance.isEmpty()) {
+        Boolean isConfirmed = Helper.confirm();
+        if (isConfirmed) {
+          Query.delete(TABLE, attendance.get(0));
+          Helper.keypress("success", "Absensi berhasil dihapus!");
+        }
+        break;
+      } else {
+        Helper.keypress("error", "Absensi tidak ada!");
+      }
+    }
   };
 
   public static void today() throws IOException, SQLException, NoSuchAlgorithmException {
