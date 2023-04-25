@@ -58,14 +58,14 @@ public class Attendance implements ServiceInterface {
       Helper.banner("Ubah Absensi");
       System.out.println(Helper.color("[INPUT ADMIN] akan dimasukkan ke dalam catatan secara otomatis!", "info"));
 
-      String id = Helper.input("Masukkan ID Izin: ", "required");
+      String id = Helper.input("Masukkan ID Izin: ", "number");
       ArrayList<String> attendance = Query.find(TABLE, Integer.parseInt(id));
 
       if(!attendance.isEmpty()) {
         UserItem user = User.find();
         System.out.println("Karyawan: " + user.username);
         String attendance_at = Helper.input("Masukkan Waktu (yyyy-mm-dd hh:mm): ", "datetime");
-        String status = Helper.input("Masukkan status (1 = Tepat Waktu, 2 = Terlambat): ", "required");
+        String status = Helper.input("Masukkan status (1 = Tepat Waktu, 2 = Terlambat): ", "number");
         String note = Helper.input("Masukkan catatan: ");
         note = "[INPUT ADMIN] " + note;
         attendance_at = attendance_at + ":00";
@@ -84,7 +84,7 @@ public class Attendance implements ServiceInterface {
   public static void delete() throws IOException, NumberFormatException, SQLException {
     while (true) {
       Helper.banner("Hapus Absensi");
-      String id = Helper.input("Masukkan ID Absensi: ", "required");
+      String id = Helper.input("Masukkan ID Absensi: ", "number");
       ArrayList<String> attendance = Query.find(TABLE, Integer.parseInt(id));
       if (!attendance.isEmpty()) {
         Boolean isConfirmed = Helper.confirm();

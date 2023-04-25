@@ -15,7 +15,6 @@ public class User implements ServiceInterface {
   public static String[] HEADERS = { "ID", "Username", "Hak Akses" };
 
   public static void list() throws IOException, SQLException {
-    Helper.banner("Daftar Pengguna");
     ArrayList<ArrayList<String>> result = Query.select("SELECT * FROM " + TABLE + " ORDER BY id DESC");
     ArrayList<ArrayList<String>> users = new ArrayList<>();
     result.forEach(row -> {
@@ -24,20 +23,19 @@ public class User implements ServiceInterface {
     });
     Table table = Query.datatable(HEADERS, users);
     table.print();
-    Helper.keypress();
   };
 
   public static UserItem find() throws IOException, SQLException, NoSuchAlgorithmException {
-    while(true) {
-      String id = Helper.input("Masukkan ID Karyawan: ", "required");
+    while (true) {
+      String id = Helper.input("Masukkan ID Karyawan: ", "number");
       ArrayList<String> userData = Query.find(TABLE, Integer.parseInt(id));
       if (!userData.isEmpty()) {
         UserItem user = new UserItem(userData);
         return user;
       } else {
         Helper.keypress("error", "Karyawan tidak ada!");
-        System.out.print(String.format("\033[%dA",1)); // Move up
-        System.out.print("\033[2K"); 
+        System.out.print(String.format("\033[%dA", 1)); // Move up
+        System.out.print("\033[2K");
         System.out.flush();
       }
     }
@@ -68,6 +66,7 @@ public class User implements ServiceInterface {
   public static void edit() throws IOException, SQLException, NoSuchAlgorithmException {
     while (true) {
       Helper.banner("Ubah Pengguna");
+      User.list();
       UserItem user = User.find();
       String username = Helper.input(String.format("Masukkan username (%s): ", user.username), "required");
       String password = Helper.input("Masukkan password: ", "required");
@@ -95,7 +94,7 @@ public class User implements ServiceInterface {
   public static void delete() throws IOException, SQLException, NoSuchAlgorithmException {
     Helper.banner("Hapus Pengguna");
     while (true) {
-      String id = Helper.input("Masukkan ID Pengguna: ", "required");
+      String id = Helper.input("Masukkan ID Pengguna: ", "number");
       ArrayList<String> userData = Query.find(TABLE, Integer.parseInt(id));
       if (!userData.isEmpty()) {
         UserItem user = new UserItem(userData);
@@ -144,7 +143,9 @@ public class User implements ServiceInterface {
               "Hapus Pengguna", "Kembali" });
       switch (choice) {
         case "1":
+          Helper.banner("Daftar Pengguna");
           User.list();
+          Helper.keypress();
           break;
         case "2":
           User.create();

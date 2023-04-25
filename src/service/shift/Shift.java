@@ -151,7 +151,7 @@ public class Shift implements ServiceInterface {
     while (true) {
       Helper.banner("Ubah Shift");
 
-      String id = Helper.input("Masukkan ID Shift: ", "required");
+      String id = Helper.input("Masukkan ID Shift: ", "number");
       ArrayList<String> shift = Query.find(TABLE, Integer.parseInt(id));
 
       if (!shift.isEmpty()) {
@@ -192,7 +192,7 @@ public class Shift implements ServiceInterface {
     while (true) {
       Helper.banner("Hapus Shift");
 
-      String id = Helper.input("Masukkan ID Shift: ", "required");
+      String id = Helper.input("Masukkan ID Shift: ", "number");
       ArrayList<String> shift = Query.find(TABLE, Integer.parseInt(id));
 
       if (!shift.isEmpty()) {

@@ -46,14 +46,27 @@ public class Leave implements ServiceInterface {
         new String[] { user.id, reason, "1", from_date, until_date, created_at });
     System.out.println("Izin Berhasil Dibuat");
     Helper.keypress();
+  };
 
+  public static void propose() throws IOException, NoSuchAlgorithmException, SQLException {
+    Helper.banner("Ajukan Izin Baru");
+    String reason = Helper.input("Masukkan alasan izin: ", "required");
+    String from_date = Helper.input("Masukkan tanggal mulai izin (yyyy-mm-dd): ", "date");
+    String until_date = Helper.input("Masukkan tanggal akhir izin (yyyy-mm-dd): ", "date");
+    String created_at = Helper.waktu();
+    Query.store(
+        "leave_requests",
+        new String[] { "user_id", "reason", "status", "from_date", "until_date", "created_at" },
+        new String[] { Service.authId, reason, "1", from_date, until_date, created_at });
+    System.out.println("Izin Berhasil Dibuat");
+    Helper.keypress();
   };
 
   public static void edit() throws IOException, NoSuchAlgorithmException, SQLException {
     while (true) {
       Helper.banner("Ubah Izin");
 
-      String id = Helper.input("Masukkan ID Izin: ", "required");
+      String id = Helper.input("Masukkan ID Izin: ", "number");
       ArrayList<String> leave = Query.find(TABLE, Integer.parseInt(id));
 
       if (!leave.isEmpty()) {
@@ -80,7 +93,7 @@ public class Leave implements ServiceInterface {
   public static void delete() throws IOException, NumberFormatException, SQLException {
     while (true) {
       Helper.banner("Hapus Izin");
-      String id = Helper.input("Masukkan ID Izin: ", "required");
+      String id = Helper.input("Masukkan ID Izin: ", "number");
       ArrayList<String> attendance = Query.find(TABLE, Integer.parseInt(id));
       if (!attendance.isEmpty()) {
         Boolean isConfirmed = Helper.confirm();
@@ -132,21 +145,20 @@ public class Leave implements ServiceInterface {
         Table table = Query.datatable(headers, leave_requests);
         table.print();
 
-        String id = Helper.input("Masukkan ID Izin (0 = kembali): ", "required");
+        String id = Helper.input("Masukkan ID Izin (0 = kembali): ", "number");
         if (!id.equals("0")) {
-          ArrayList<String> leave = Query.find(TABLE, Integer.parseInt(id));
-
+          ArrayList<String> leave = Query.find(TABLE, "WHERE status=1 AND id=" + id);
           if (!leave.isEmpty()) {
-            String status = Helper.input("Masukkan approval (2 = Setuju, 3 = TIdak Setuju): ", "required");
-
+            String status = Helper.input("Masukkan approval (2 = Setuju, 3 = Tidak Setuju): ", "required");
             if (status.equals("2") || status.equals("3")) {
               Query.update(
                   TABLE,
                   id,
                   new String[] { "status" },
                   new String[] { status });
-
               Helper.keypress("success", "Berhasil melakukan approval izin!");
+            } else {
+              Helper.keypress("success", "Tipe approval tidak ada!");
             }
           } else {
             Helper.keypress("error", "Izin tidak ditemukan!");

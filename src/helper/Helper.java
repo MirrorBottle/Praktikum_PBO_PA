@@ -81,6 +81,9 @@ public final class Helper {
         if(!validation.equals("required")) {
           Pattern pattern = null;
           switch (validation) {
+            case "number":
+              pattern = Pattern.compile("^\\d+$");
+              break;
             case "date":
               pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
               break;
@@ -158,7 +161,7 @@ public final class Helper {
         System.out.println(idx + ". " + menu);
         idx++;
       }
-      choice = Helper.input("Masukkan pilihan: ", "required");
+      choice = Helper.input("Masukkan pilihan: ", "number");
       isCorrect = Integer.parseInt(choice) <= menus.length && Integer.parseInt(choice) > 0;
       if (!isCorrect) {
         int lines = menus.length + 1;

@@ -97,7 +97,7 @@ public class Service {
           Leave.history();
           break;
         case "5":
-          Leave.create();
+          Leave.propose();
           break;
         case "6":
           User.changePass();
