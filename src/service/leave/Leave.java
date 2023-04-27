@@ -158,7 +158,7 @@ public class Leave implements ServiceInterface {
                   new String[] { status });
               Helper.keypress("success", "Berhasil melakukan approval izin!");
             } else {
-              Helper.keypress("success", "Tipe approval tidak ada!");
+              Helper.keypress("error", "Tipe approval tidak ada!");
             }
           } else {
             Helper.keypress("error", "Izin tidak ditemukan!");
@@ -175,8 +175,8 @@ public class Leave implements ServiceInterface {
     while (isRunning) {
       Helper.banner("Manajemen Izin");
       String choice = Helper
-          .menus(new String[] { "Lihat Daftar Shift", "Tambah Shift", "Ubah Shift",
-              "Hapus Shift", "Kembali" });
+          .menus(new String[] { "Lihat Daftar Izin", "Tambah Izin", "Ubah Izin",
+              "Hapus Izin", "Kembali" });
       switch (choice) {
         case "1":
           Leave.list();

@@ -46,7 +46,7 @@ public class User implements ServiceInterface {
       Helper.banner("Buat Pengguna Baru");
       String username = Helper.input("Masukkan Username: ", "required");
       String password = Helper.input("Masukkan Password: ", "required");
-      String role = Helper.input("Masukkan Hak Akses (1 = admin, 2 = karyawan): ", "required");
+      String role = Helper.input("Masukkan Hak Akses (1 = admin, 2 = karyawan): ", "number");
       ArrayList<String> user = Query.find(TABLE, String.format("WHERE username='%s'", username));
 
       if (user.isEmpty()) {
@@ -70,7 +70,7 @@ public class User implements ServiceInterface {
       UserItem user = User.find();
       String username = Helper.input(String.format("Masukkan username (%s): ", user.username), "required");
       String password = Helper.input("Masukkan password: ", "required");
-      String role = Helper.input("Masukkan hak akses (1 = admin, 2 = karyawan): ", "required");
+      String role = Helper.input("Masukkan hak akses (1 = admin, 2 = karyawan): ", "number");
 
       ArrayList<String> userFindSameUsername = Query.find(TABLE,
           String.format("WHERE username='%s' AND id<>%s", username, user.id));
@@ -92,8 +92,9 @@ public class User implements ServiceInterface {
   };
 
   public static void delete() throws IOException, SQLException, NoSuchAlgorithmException {
-    Helper.banner("Hapus Pengguna");
     while (true) {
+      Helper.banner("Hapus Pengguna");
+      User.list();
       String id = Helper.input("Masukkan ID Pengguna: ", "number");
       ArrayList<String> userData = Query.find(TABLE, Integer.parseInt(id));
       if (!userData.isEmpty()) {
